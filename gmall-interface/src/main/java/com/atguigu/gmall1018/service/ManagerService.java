@@ -24,6 +24,15 @@ public interface ManagerService {
     //保存属性的方法
     public void saveAttrInfo(BaseAttrInfo baseAttrInfo);
 
-    //通过平台属性id获取平台属性值
+    // 通过平台属性Id 查询平台属性值集合
     List<BaseAttrValue> getAttrValueList(String attrId);
+
+    // 通过属性id 查询平台属性对象
+    BaseAttrInfo getAttrInfo(String attrId);
+
+    //构造了一个spu对象查询
+    List<SpuInfo> getSpuInfoList(SpuInfo spuInfo);
+
+    //只能根据分类id查询
+    List<SpuInfo> getSpuInfoList(String catalog3Id);
 }

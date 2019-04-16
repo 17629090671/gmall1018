@@ -25,7 +25,8 @@ public class ManageServiceImpl implements ManagerService {
     private BaseCatalog2Mapper baseCatalog2Mapper;
     @Autowired
     private BaseCatalog3Mapper baseCatalog3Mapper;
-
+    @Autowired
+    private SpuInfoMapper spuInfoMapper;
     @Override
     public List<BaseCatalog1> getCatalog1() {
         return baseCatalog1Mapper.selectAll();
@@ -88,5 +89,30 @@ public class ManageServiceImpl implements ManagerService {
         BaseAttrValue baseAttrValue = new BaseAttrValue();
         baseAttrValue.setAttrId(attrId);
         return baseAttrValueMapper.select(baseAttrValue);
+    }
+
+    @Override
+    public BaseAttrInfo getAttrInfo(String attrId) {
+        // 根据attrId 获取平台属性对象
+        BaseAttrInfo baseAttrInfo = baseAttrInfoMapper.selectByPrimaryKey(attrId);
+
+        // 通过attrId 查询到平台属性值集合
+        BaseAttrValue baseAttrValue = new BaseAttrValue();
+        baseAttrValue.setAttrId(baseAttrInfo.getId());
+        List<BaseAttrValue> baseAttrValues = baseAttrValueMapper.select(baseAttrValue);
+        // 给平台属性值集合赋值
+        baseAttrInfo.setAttrValueList(baseAttrValues);
+
+        return baseAttrInfo;
+    }
+
+    @Override
+    public List<SpuInfo> getSpuInfoList(SpuInfo spuInfo) {
+        return spuInfoMapper.select(spuInfo);
+    }
+
+    @Override
+    public List<SpuInfo> getSpuInfoList(String catalog3Id) {
+        return null;
     }
 }

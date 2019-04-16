@@ -41,16 +41,26 @@ public class ManagerController {
     public List<BaseCatalog3> attrInfoList(String catalog3Id){
         return managerService.getCatalog3(catalog3Id);
     }
-    //保存的方法
+    // jackson.jar
+    // boolen ,int ,string, void
     @RequestMapping("saveAttrInfo")
     @ResponseBody
     public void saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo){
+        // 调用服务层的方法，将数据对应添加到数据库
+        // saveAttrInfo() 方法中的参数应该是页面传递过来的数据 {baseAttrInfo baseAttrValue}
         managerService.saveAttrInfo(baseAttrInfo);
     }
-    //通过属性id查询到平台属性值集合!
+
+    // 通过属性id 查询到平台属性值集合！
     @RequestMapping("getAttrValueList")
     @ResponseBody
     public List<BaseAttrValue> getAttrValueList(String attrId){
-        return managerService.getAttrValueList(attrId);
+        // 调用service
+        // return  managerService.getAttrValueList(attrId);
+        // attrId 查找平台属性对象
+        BaseAttrInfo baseAttrInfo = managerService.getAttrInfo(attrId);
+        // 返回平台属性对象.平台属性值集合
+
+        return baseAttrInfo.getAttrValueList();
     }
 }
