@@ -35,4 +35,28 @@ public interface ManagerService {
 
     //只能根据分类id查询
     List<SpuInfo> getSpuInfoList(String catalog3Id);
+
+    // 查询基本销售属性表
+    List<BaseSaleAttr> getBaseSaleAttrList();
+
+    //保存商品spu信息
+    void saveSpuInfo(SpuInfo spuInfo);
+
+    //根据spuId查询spuImage列表
+    List<SpuImage> getSpuImageList(String spuId);
+
+    //根据spuId查询销售属性对象
+    List<SpuSaleAttr> getSpuSaleAttrList(String spuId);
+
+    //保存skuInfo数据
+    void saveSkuInfo(SkuInfo skuInfo);
+
+    //根据skuId获得skuInfo对象
+    SkuInfo getSkuInfo(String skuId);
+
+    //根据spuId,skuId查询销售属性
+    List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(SkuInfo skuInfo);
+
+    // 根据spuId 查询销售属性值的集合
+    List<SkuSaleAttrValue> getSkuSaleAttrValueListBySpu(String spuId);
 }

@@ -22,6 +22,7 @@ public class BaseAttrInfo implements Serializable {
     private String attrName;
     @Column
     private String catalog3Id;
+
     //@Transient业务所需要的字段,数据库中实际不存在
     @Transient
     private List<BaseAttrValue> attrValueList;

@@ -1,5 +1,7 @@
 package com.atguigu.gmall1018.manager.controller;
 
+
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall1018.bean.*;
 import com.atguigu.gmall1018.service.ManagerService;
@@ -38,8 +40,8 @@ public class ManagerController {
     }
     @RequestMapping("attrInfoList")
     @ResponseBody
-    public List<BaseCatalog3> attrInfoList(String catalog3Id){
-        return managerService.getCatalog3(catalog3Id);
+    public List<BaseAttrInfo> attrInfoList(String catalog3Id){
+        return managerService.getAttrList(catalog3Id);
     }
     // jackson.jar
     // boolen ,int ,string, void
