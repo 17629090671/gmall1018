@@ -1,15 +1,17 @@
 package com.atguigu.gmall1018.manager.service.impl;
 
+
+
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall1018.RedisUtil;
 import com.atguigu.gmall1018.bean.*;
+import com.atguigu.gmall1018.manager.constant.ManageConst;
 import com.atguigu.gmall1018.manager.mapper.*;
 import com.atguigu.gmall1018.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 
-import javax.swing.*;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -245,12 +247,47 @@ public class ManageServiceImpl implements ManagerService {
     //
     @Override
     public SkuInfo getSkuInfo(String skuId) {
-//        Jedis jedis = redisUtil.getJedis();
-//        jedis.set("k1","微星手机");
-//        jedis.close();
+        try {
+            // 获取jedis 客户端
+            Jedis jedis = redisUtil.getJedis();
+            // 定义key
+            String skuKey = ManageConst.SKUKEY_PREFIX+skuId+ManageConst.SKUKEY_SUFFIX;
+            // 查询缓存数据
+            String skuJson = jedis.get(skuKey);
+            // 此时缓存中没有数据
+            if (skuJson==null || skuJson.length()==0){
+                System.out.println("缓存中没有数据！");
+                // 定义一个分布式锁的Key
+                String skuLockKey=ManageConst.SKUKEY_PREFIX+skuId+ManageConst.SKULOCK_SUFFIX;
+                // 执行完返回的结果
+                String LockKey = jedis.set(skuLockKey, "OK", "NX", "PX", ManageConst.SKULOCK_EXPIRE_PX);
+                if ("OK".equals(LockKey)){
+                    // 设置分布式锁！
+                    System.out.println("获取分布式锁！");
+                    // 从数据库中获取数据
+                    SkuInfo skuInfoDB = getSkuInfoDB(skuId);
+                    // 将数据放入redis 中
+                    // jedis.set(skuKey,JSON.toJSONString(skuInfoDB));
+                    // 带过期时间的
+                    jedis.setex(skuKey,ManageConst.SKUKEY_TIMEOUT, JSON.toJSONString(skuInfoDB));
+                    return skuInfoDB;
+                }else {
+                    // 其他人应该等待
+                    Thread.sleep(1000);
+                    // 继续查询数据
+                    getSkuInfo(skuId);
+                }
+            }else{
+                // 有缓存
+                SkuInfo skuInfo = JSON.parseObject(skuJson, SkuInfo.class);
+                return skuInfo;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return getSkuInfoDB(skuId);
     }
-
+    //抽取方法快捷键:alt+shift+m
     private SkuInfo getSkuInfoDB(String skuId) {
         SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
         SkuImage skuImage = new SkuImage();
