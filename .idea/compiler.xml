@@ -39,7 +39,6 @@
       <module name="gmall-service-util" target="1.8" />
       <module name="gmall-user-manager" target="1.8" />
       <module name="gmall-web-util" target="1.8" />
-      <module name="gmallinterface" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
