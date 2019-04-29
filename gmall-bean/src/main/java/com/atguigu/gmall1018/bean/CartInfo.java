@@ -23,6 +23,7 @@ public class CartInfo implements Serializable {
     @Column
     Integer skuNum;
     @Column
+
     String imgUrl;
     @Column
     String skuName;
