@@ -33,5 +33,6 @@ public class CartInfo implements Serializable {
     BigDecimal skuPrice;
     // 下订单的时候，商品是否勾选
     @Transient
+
     String isChecked="0";
 }
